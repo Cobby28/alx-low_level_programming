@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc $CFILE -o cosfun
+gcc $CFILE -o cisfun
