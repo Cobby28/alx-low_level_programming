@@ -1,55 +1,25 @@
-/*
- *
- * * File: 8-print_base16.c
- *
- * * Auth: Brennan D Baraban
- *
- * */
-
- 
-
 #include <stdio.h>
 
- 
-
 /**
- *
- * * main - Prints all the numbers of base 16 in lowercase.
- *
- * *
- *
- * * Return: Always 0.
- *
- * */
-
+  * main - Prints a hexadecimal string
+  *
+  * Return: Always (Success)
+  */
 int main(void)
-
 {
+	char c;
 
-	                int num;
+	for (c = '0'; c <= '9'; c++)
+	{
+		putchar(c);
+	}
 
-			                char letter;
+	for (c = 'a'; c <= 'f'; c++)
+	{
+		putchar(c);
+	}
 
-					 
+	putchar('\n');
 
-					                for (num = 0; num < 10; num++)
-
-								                                putchar((num % 10) + '0');
-
-							 
-
-							                for (letter = 'a'; letter <= 'f'; letter++)
-
-										                                putchar(letter);
-
-									 
-
-									                putchar('\n');
-
-											 
-
-											                return (0);
-
+	return (0);
 }
-
-
