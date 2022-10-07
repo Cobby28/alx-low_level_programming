@@ -1,226 +1,152 @@
 #include "main.h"
-#include <stdio.h>
 #include <stdlib.h>
 
-int _strlen(char *s);
-char *xarray(int size);
-char *_zero_iteration(char *s);
-int convert_to_digit(char s);
-void _product(char *prod, char *mul, int digit, int zeroes);
-void nums_add(char *final_prod, char *next_prod, int next_len);
+/**
+ * _atoi_digit - convert a char to integer.
+ * @x: character to convert.
+ * Return: integer.
+ **/
+
+int _atoi_digit(char x)
+{
+	unsigned int res;
+
+	if (x <= '9' && x >= '0')
+		res = x - '0';
+	return (res);
+}
 
 /**
- *_strlen - length of string
- *
- *@s:string
- *
- *Return:string length
- *
- */
-int _strlen(char *s)
+ * _isNumber - Define if a string is a number.
+ * @argv: Pointer to string.
+ * Return: success (0).
+ **/
+int _isNumber(char *argv)
 {
 	int i;
 
-	for (i = 0; s[i] != '\0'; i++)
-		;
-	return (i);
+	for (i = 0; argv[i]; i++)
+		if (argv[i] < 48 || argv[i] > 57)
+			return (1);
+	return (0);
 }
+
 /**
- *xarray - creates an array and initializes its value to x plus terminating
- *null byte
- *@size:size of array to be initialised
- *Return:pointer to array
- */
-char *xarray(int size)
+ * _calloc - allocate array of size * nmemb.
+ * @nmemb: number of elements.
+ * @size: size of element.
+ * Return: pointer to array.
+ **/
+
+void *_calloc(unsigned int nmemb, unsigned int size)
 {
-	int i;
-	char *arr;
+	char *tab;
+	unsigned int i;
 
-	arr = malloc(sizeof(char) * size);
-	if (arr == NULL)
-	{
-		exit(98);
-	}
-	for (i = 0; i < (size - 1); i++)
-	{
-		arr[i] = 'x';
-	}
-	arr[i] = '\0';
-	return (arr);
+	tab = malloc(size * nmemb);
+
+	if (tab == NULL)
+		return (NULL);
+
+	for (i = 0; i < (size * nmemb); i++)
+		tab[i] = '0';
+
+	return (tab);
 }
+
 /**
- *_zero_iteration - iterates thru a given no. of zeroes
- *
- *@s:string to be iterated
- *Return:pointer to next non-zero element
- */
-char *_zero_iteration(char *s)
+ * mul_array - multiply two arrays.
+ * @a1: first array.
+ * @len1: length of array a1.
+ * @a2:  char.
+ * @a3: array for result.
+ * @lena: length of array a3.
+ * Return: pointer to array.
+ **/
+
+void *mul_array(char *a1, int len1, char a2, char *a3, int lena)
 {
-	while (*s && *s == '0')
+	int mul = 0, i, k;
+
+	k = lena;
+	for (i = len1 - 1; i >= 0 ; i--)
 	{
-		s++;
+		mul += (a1[i] - '0') * (a2 - '0') + (a3[k] - '0');
+		a3[k] = (mul % 10) + '0';
+		mul /= 10;
+		k--;
 	}
-	return (s);
+
+	while (mul != 0)
+	{
+		mul += a3[k] - '0';
+		a3[k] = (mul % 10) + '0';
+		mul /= 10;
+		k--;
+	}
+
+	return (a3);
 }
 /**
- *convert_to_digit - converts digit character to int
- *
- *@s:digit character
- *
- *Return:converted int
- *
- */
-int convert_to_digit(char s)
+ * print_array - print all digits of array.
+ * @nb: number of elements to print.
+ * @a: array of elements.
+ **/
+void print_array(char *a, int nb)
 {
-	int digit = s - '0';
+	int i = 0;
 
-	if (digit < 0 || digit > 9)
+	while (a[i] == '0' && (i + 1) < nb)
 	{
-		printf("Error\n");
-		exit(98);
+
+		i++;
 	}
-	return (digit);
+	for (; i < nb; i++)
+	{
+		_putchar(a[i]);
+	}
+	_putchar('\n');
 }
+
 /**
- *_product - multiplies string of numbers by a single digit
- *
- *@prod:buffer to store result
- *@mul:string of no.
- *@digit:single digit
- *@zeroes:leading zeroes
- *
- *Return:void
+ * main - print the multiplication of 2 numbers.
+ * @argc: array length.
+ * @argv: array.
+ * Return: 0.
  */
-void _product(char *prod, char *mul, int digit, int zeroes)
-{
-	int mul_len, num, tens = 0;
 
-	mul_len = _strlen(mul) - 1;
-	mul += mul_len;
-
-	while (*prod)
-	{
-		*prod = 'x';
-		prod++;
-	}
-	prod--;
-
-	while (zeroes--)
-	{
-		*prod = '0';
-		prod--;
-	}
-	for (; mul_len >= 0; mul_len--, prod--, mul--)
-	{
-		if (*mul < '0' || *mul > '9')
-		{
-			printf("Error\n");
-			exit(98);
-		}
-		num = (*mul - '0') * digit;
-		num += tens;
-		*prod = (num % 10) + '0';
-		tens = num / 10;
-	}
-	if (tens)
-	{
-		*prod = (tens % 10) + '0';
-	}
-}
-/**
- *nums_add - adds numbers stored in two strings
- *
- *@final_prod:final product buffer
- *@next_prod :next product to be added
- *@next_len:length of next prod
- *
- *Return:void
- */
-void nums_add(char *final_prod, char *next_prod, int next_len)
-{
-	int num, tens;
-
-	tens = 0;
-	while (*(final_prod + 1))
-	{
-		final_prod++;
-	}
-	while (*(next_prod + 1))
-	{
-		next_prod++;
-	}
-	for (; *final_prod != 'x'; final_prod--)
-	{
-		num = (*final_prod - '0') + (*next_prod - '0');
-		num += tens;
-		*final_prod = (num % 10) + '0';
-		tens = num / 10;
-		next_prod--;
-		next_len--;
-	}
-	for (; next_len >= 0 && *next_prod != 'x'; next_len--)
-	{
-		num = (*next_prod - '0');
-		num += tens;
-		*final_prod = (num % 10) + '0';
-		tens = num / 10;
-		final_prod--;
-		next_prod--;
-	}
-	if (tens)
-	{
-		*final_prod = (tens % 10) + '0';
-	}
-}
-/**
- *main - multiplies two positive numbers and prints the result
- *
- *@argc:arguement count
- *@argv:arguement vector
- *Return:(0- success)
- */
 int main(int argc, char *argv[])
 {
-	char *final_prod, *next_prod;
-	int i, size, digit, zeroes = 0;
+	int i, c, len1, len2, lenres;
+	char E[6] = {'E', 'r', 'r', 'o', 'r', '\n'};
+	char *tabres;
 
-	if (argc != 3)
+	if (argc != 3 || _isNumber(argv[1]) == 1 || _isNumber(argv[2]) == 1)
 	{
-		printf("Error\n");
+		for (i = 0; i < 6; i++)
+		{
+			_putchar(E[i]);
+		}
 		exit(98);
 	}
-	if (*(argv[1]) == '0')
+	for (len1 = 0; argv[1][len1]; len1++)
+		;
+	for (len2 = 0; argv[2][len2]; len2++)
+		;
+	lenres = len1 + len2;
+	tabres = _calloc(lenres, sizeof(int));
+	if (tabres == NULL)
 	{
-		argv[1] = _zero_iteration(argv[1]);
+		free(tabres);
+		free(tabres);
 	}
-	if (*(argv[2]) == '0')
+	for (i = len2 - 1, c = 0; i >= 0; i--)
 	{
-		argv[2] = _zero_iteration(argv[2]);
+		tabres = mul_array(argv[1], len1, argv[2][i], tabres, (lenres - 1 - c));
+		c++;
 	}
-	if (*(argv[1]) == '\0' || *(argv[2]) == '\0')
-	{
-		printf("0\n");
-		return (0);
-	}
-	size = _strlen(argv[1]) + _strlen(argv[2]);
-	final_prod = xarray(size + 1);
-	next_prod = xarray(size + 1);
-
-	for (i = _strlen(argv[2]) - 1; i >= 0; i--)
-	{
-		digit = convert_to_digit(*(argv[2] + i));
-		_product(next_prod, argv[1], digit, zeroes++);
-		nums_add(final_prod, next_prod, size - 1);
-	}
-	for (i = 0; final_prod[i]; i++)
-	{
-		if (final_prod[i] != 'x')
-		{
-			putchar(final_prod[i]);
-		}
-	}
-	putchar('\n');
-	free(next_prod);
-	free(final_prod);
+	print_array(tabres, lenres);
+	free(tabres);
+	exit(EXIT_SUCCESS);
 	return (0);
 }
