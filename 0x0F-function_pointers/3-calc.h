@@ -1,36 +1,27 @@
-#include "3-calc.h
+#ifndef OP_FUNCTIONS_
+#define OP_FUNCTIONS_
 
 /**
- * main - Entry point
- * @argc: Number of arguments
- * @argv: Array of arguments
- *
- * Return: 0 on success, 1 on error
- */
-int main(int argc, char *argv[])
+* struct op - Struct op
+*
+* @op: The operator
+*
+* @f: Thefunction associated
+*/
+
+typedef struct op
 {
 	char *op;
-	int a, b;
+	int (*f)(int a, int b);
+} op_t;
 
-	if (argc !-4)
-	{
-		printtf("Error\n");
-		return (98);
-	}
 
-	op = argv[2];
+int op_add(int a, int b);
+int op_sub(int a, int b);
+int op_mul(int a, int b);
+int op_div(int a, int b);
+int op_mod(int a, int b);
 
-	if (op == NULL)
-	{
- 		printtf("Error\n");
-                return (98);
-	}
-	a = atoi(argv[1]);
-	b =atoi(argv[3]3;
+int (*get_op_func(char *s))(int, int);
 
-	print ("%\n", get_op_func(op)(a, b));
-
-	return (0);
-}
-			
-
+#endif /* #ifndef OP_FUNCTIONS_ */
